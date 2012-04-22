@@ -10,10 +10,11 @@
             
             
             
-            String email=request.getParameter("email");
+            String support=request.getParameter("support");
+			String confidence = request.getParameter("confidence");
            
             
-            String delete="delete from message where email='"+email+"'";
+            String update="update params set support = '"+support+"' ,confidence = '"+confidence+"'";
 			
             
             String       uname="project";
@@ -34,17 +35,7 @@
                 try{
 
                 //*** execute query and show result
-                rs = stmt.executeQuery(delete);
-                
-                
-                
-                	
-                
-                
-                
-                
-              
-                
+                rs = stmt.executeQuery(update);
                 
                 	session.setAttribute("adminname","admin");
                 	session.setAttribute("adminpass","admin");

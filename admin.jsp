@@ -13,9 +13,14 @@
             Statement    stmt;
             Statement    stmt2;
             Statement    stmt3;
-            ResultSet    rs;
+            
+			
+			ResultSet    rs;
             ResultSet    rs2;
             ResultSet    rs3;
+			
+			
+			
             
             String loginUser="";
             String loginPassword="";
@@ -32,11 +37,12 @@
             String message="select * from message ";
             String orders="select * from orders ";
             
+			
             
             
             
             String       uname="project";
-            String       passwd="project";
+            String       passwd="880224";
           
             //*** Load the jdbc-odbc bridge driver
                 Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();
@@ -50,12 +56,14 @@
                 stmt2 = con.createStatement();
                 stmt3 = con.createStatement();
                 
+				
 
                 //*** execute query and show result
                 rs = stmt.executeQuery(query);
                 rs2 = stmt2.executeQuery(orders);
                 rs3 = stmt3.executeQuery(message);
                 
+				
               
                 
                 try{
@@ -296,6 +304,24 @@
 		</div>
 		<div class="form_row">
 			<input type="submit" name="submit" value="Delete"/>&nbsp;&nbsp;&nbsp;
+		  <input type="reset"  value="Clear">
+		</div>
+	</div>
+	</form>    
+
+	</div>
+	
+	<form method=post action="update_params.jsp">
+	<div class="params_update">
+		<div style="width:335px; clear:both; padding:5px 0 5px 0; color:#a53d17;">
+			&nbsp;&nbsp;&nbsp;Support:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<INPUT style="width: 70%" TYPE="text" NAME="support" VALUE="">
+			
+			&nbsp;&nbsp;&nbsp;Confidence:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<INPUT style="width: 70%" TYPE="text" NAME="confidence" VALUE="">
+		</div>
+		<div class="form_row">
+			<input type="submit" name="update" value="Update"/>&nbsp;&nbsp;&nbsp;
 		  <input type="reset"  value="Clear">
 		</div>
 	</div>

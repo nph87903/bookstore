@@ -14,7 +14,7 @@
       		 	 alert("username is not valid (email form)");
       		 	 return false
       		 }
-      		 else if(y.length<8){
+      		 else if(y.length<0){
       		 			alert("password is less than 8 digits and characters");
       		 			return false
       		 			}

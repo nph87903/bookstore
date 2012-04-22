@@ -15,9 +15,12 @@
             Connection   con;
             
             Statement    stmt4;
+			
+			Statement    stmt5;
             
             ResultSet    rs4;
-           
+            ResultSet    rs5;
+			
             String loginUser=null;
             String count="0";
             String price="0.00";
@@ -28,10 +31,11 @@
             
             String 		id=request.getParameter("id");
             
-            String       uname="ld548674";
-            String       passwd="d3329774";
+             String       uname="project";
+            String       passwd="880224";
             
             String		 details="select * from book where book_id='"+id+"'";
+			String       associate = "select itemy from ASSOCIATIONRULES where itemx = '"+id+"'";
 			//String query2="select * from users where username='"+loginUser+"' and password='"+loginPassword+"'";
             
             //*** Load the jdbc-odbc bridge driver
@@ -49,7 +53,9 @@
                 
                 rs4 = stmt4.executeQuery(details);
             
-              
+              stmt5 = con.createStatement();
+			  
+			  rs5 = stmt5.executeQuery(associate);
 %>
 </head>
 <body>
@@ -145,7 +151,8 @@
           	    <div class="recommended_title">Description:<% out.println(rs4.getString(10)); %></div>
             <form method=post action="addtocart.jsp">
             <input type="hidden" name="title" value="<% out.print(rs4.getString(2)); %>"/>
-            <input type="hidden" name="price" value="<% out.println(rs4.getString(4)); %>"/>
+            <input type="hidden" name="price" value="<% out.println(rs4.getString(4)); %>"/>			
+			 <input type="hidden" name="book_id" value="<% out.println(rs4.getString(1)); %>"/>
             <input class="btn1" type="submit" name="submit" value="Add to Cart"/>  
             </form>     
             <form method=post action="details.jsp">
@@ -158,10 +165,62 @@
        }
         %>
 		
-
-    	
-      
 	</div>
+	
+	
+	<div style = "position:absolute;top:700px; left:230px;">
+	<p> Recommend</p>
+	<%
+	   if (rs5.next())
+	   	   {
+		   String[] splitStr = rs5.getString(1).split(";"); 
+		   for ( int i = 0;i < splitStr.length;i++)
+		   
+		   {
+		   Statement    stmt6;
+		   ResultSet    rs6;
+		   
+		    stmt6 = con.createStatement();
+
+                //*** execute query and show result
+                
+                rs6 = stmt6.executeQuery("select * from book where book_id='"+splitStr[i]+"'");
+				
+				if (rs6.next())
+				{
+				
+				%>
+				<div class="book_box">
+            <div class="center_book_box">            
+                 <div class="book_title"><% out.println(rs6.getString(2)); %></div>
+                 <div class="book_img"><img src="<%out.print("images/"+rs6.getString(9)); %>" alt="" title="" width="100" height="110" border="0" /></div>
+                 <div class="book_price">$<% out.println(rs6.getString(4)); %></div>                        
+            </div>          
+            <div class="book_details_tab">
+            <form method=post action="addtocart.jsp">
+            <input type="hidden" name="title" value="<% out.println(rs6.getString(2)); %>"/>
+            <input type="hidden" name="price" value="<% out.println(rs6.getString(4)); %>"/>			
+			 <input type="hidden" name="book_id" value="<% out.println(rs6.getString(1)); %>"/>
+            <input class="btn1" type="submit" name="submit" value="Add to Cart"/>  
+            </form> 
+            <form method=post action="details.jsp">
+            <input type="hidden" name="id" value="<% out.print(rs6.getString(1)); %>"/>            
+            <input class="btn2" type="submit" name="submit" value="Details"/>  
+            </form>            
+            </div>                     
+       		</div>
+				
+				<%
+				
+				}
+				stmt6.close();
+		   
+		   }
+		  
+	   }
+	%>
+	</div>
+		
 	<!-- end of center content -->
 
     <!-- right content start -->
@@ -257,6 +316,8 @@
 <%//*** close connection
                 
                 stmt4.close();
+				stmt5.close();
+				
                 con.close(); %>
 </body>
 </html>

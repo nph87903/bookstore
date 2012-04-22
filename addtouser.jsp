@@ -20,7 +20,7 @@
 			String query="INSERT INTO users VALUES ('"+username+"','"+password+"','"+email+"')";
             
             String       uname="project";
-            String       passwd="project";
+            String       passwd="880224";
           
             //*** Load the jdbc-odbc bridge driver
                 Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();

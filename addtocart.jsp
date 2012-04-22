@@ -3,11 +3,13 @@
 
 <% 
 
-String title=request.getParameter("title");
+String title=request.getParameter("title");title=title.replaceAll("\n","");
 
 double price= Double.parseDouble(request.getParameter("price"));
 
-String item="Title:"+title+"----Price:$"+String.valueOf(price)+";";
+String book_id = request.getParameter("book_id");book_id=book_id.replaceAll("\n","");
+
+String item="book_id:"+book_id+"----Title:"+title+"----Price:$"+String.valueOf(price)+";";
 if(session.getAttribute("cart")==null)
 	session.setAttribute("cart",item);
 else

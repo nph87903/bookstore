@@ -59,7 +59,7 @@
 		 	
 		 	%>
 			<div style="width:335px; clear:both; padding:5px 0 5px 0; color:#a53d17;">
-			&nbsp;&nbsp;&nbsp;<%out.print("#"+(i+1)+": "+item[i]); %>
+			&nbsp;&nbsp;&nbsp;<%out.print("#"+(i+1)+":"+item[i]); %>
 			</div>
 			<form method="post" action="removecart.jsp">
 			<input type="hidden" name="number" value="<%out.print(i); %>"/>

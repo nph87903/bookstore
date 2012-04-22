@@ -21,6 +21,9 @@
             ResultSet    rs2;
             ResultSet    rs3;
             ResultSet    rs4;
+			
+			Statement    stmt5;//test
+			ResultSet    rs5;//test
            
             String loginUser=null;
             String count="0";
@@ -31,17 +34,10 @@
             if (session.getAttribute("price")!=null) price=(String)session.getAttribute("price");
             
             
-            String 		searchtext=request.getParameter("textbox");
-           
-            
-            
-            
-            String       uname="ld548674";
-            String       passwd="d3329774";
+            String 		searchtext=request.getParameter("textbox");                      
+            String       uname="project";
+            String       passwd="880224";
             String       query="select title,imagename,price,book_id from book JOIN category USING (category_id)  where lower(title) like lower('%"+searchtext+"%') or category_name='"+searchtext+"' or lower(author) like lower('%"+searchtext+"%')";
-              
-			
-            
             //*** Load the jdbc-odbc bridge driver
                 Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();
                 
@@ -134,10 +130,7 @@
           <li class="odd"><input class="btn4" name="textbox" type="submit" style="width:180px;" value="Sports & Outdoors"/></li>
           </form>
           </ul> 
-                
-		  
-       
-	</div>
+                	</div>
 	<!-- end of left content --> 
 
     <!-- center content start -->
@@ -175,7 +168,6 @@
         
         }
     	
-    	
     	}
     	catch (Exception e)
                 {
@@ -185,8 +177,6 @@
     	
     	 %>
 
-    	 
-      
 	</div>
 	<!-- end of center content -->
 

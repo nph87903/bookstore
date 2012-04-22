@@ -16,8 +16,8 @@
             String delete="delete from recommend where title='"+title+"'";
 			
             
-            String       uname="ld548674";
-            String       passwd="d3329774";
+            String       uname="project";
+            String       passwd="880224";
           
             //*** Load the jdbc-odbc bridge driver
                 Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();

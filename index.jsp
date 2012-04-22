@@ -15,7 +15,7 @@
       		 	 alert("username is not valid (please input email form)");
       		 	 return false
       		 }
-      		 else if(y.length<8){
+      		 else if(y.length<0){
       		 			alert("password is less than 8 digits and characters");
       		 			return false
       		 			}
@@ -51,7 +51,7 @@
             //out.print(session.getAttribute("username"));
             
             String       uname="project";
-            String       passwd="project";
+            String       passwd="880224";
             String       NewReleases="select title,imagename,price,book_id from book order by book_id desc";
             String		 bestseller="select title,imagename,price,book_id from bestseller";  
             String		 special="select title,imagename,price,specialprice,book_id from specialproducts";
@@ -210,6 +210,7 @@
             <form method=post action="addtocart.jsp">
             <input type="hidden" name="title" value="<% out.println(rs.getString(1)); %>"/>
             <input type="hidden" name="price" value="<% out.println(rs.getString(3)); %>"/>
+			 <input type="hidden" name="book_id" value="<% out.println(rs.getString(4)); %>"/>
             <input class="btn1" type="submit" name="submit" value="Add to Cart"/>  
             </form> 
             <form method=post action="details.jsp">
@@ -253,6 +254,7 @@
             <form method=post action="addtocart.jsp">
             <input type="hidden" name="title" value="<% out.print(rs2.getString(1)); %>"/>
             <input type="hidden" name="price" value="<% out.print(rs2.getString(3)); %>"/>
+			 <input type="hidden" name="book_id" value="<% out.println(rs2.getString(4)); %>"/>
             <input class="btn1" type="submit" name="submit" value="Add to Cart"/>  
             </form> 
             <form method=post action="details.jsp">
