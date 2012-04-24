@@ -26,6 +26,28 @@ private static ArrayList<ArrayList<String>> getpowerset(int n,
 		return powerSet;
 		}
 %>
+
+<%!public static String orderString(String noOrderString){
+		String[] words = noOrderString.split(";");
+		String orderedString ="";
+		try {
+		     java.util.Arrays.sort(words);
+		     for(String s: words){
+		    	 orderedString+=s+";";
+		     }
+		     
+
+		      }
+		    catch(Exception e){
+		      e.printStackTrace();
+		    }
+
+		
+		return orderedString;
+		
+	}
+%>
+
     <%@ page import="java.net.*, java.io.*, java.sql.*, java.util.*,java.util.Date,java.text.SimpleDateFormat" %>
 <% 
 			//**declare variables for insertion
@@ -92,22 +114,35 @@ private static ArrayList<ArrayList<String>> getpowerset(int n,
 			//*** execute query and show result
             rs = stmt.executeQuery(query);    
 			if(orderId%10==0){
-				 session.invalidate(); 
-				 out.print("<script type='text/javascript'>alert('Good');document.location.href='index.jsp';</script>"); 
+				 //session.invalidate(); 
+				// out.print("<script type='text/javascript'>alert('Good');document.location.href='index.jsp';</script>"); 
 			}
 			
 			query ="SELECT items from orders";
 			stmt.executeQuery("delete from ASSOCIATIONRULES");
+			stmt.executeQuery("delete from ITEMSSUPPORT");
 			ResultSet rs2 = stmt.executeQuery(query);
+			
 			String orders = ""; // data file
 			while(rs2.next()){
 				String temp = "";
 				temp =  rs2.getString(1);
 				orders += temp+"`";
+				orders = orders.trim();
 				}
-				out.print(orders);
-			double supportLine=0.3; // support limit
-			double confidenceLine=0.5; // confidence limit
+			String supportPara="",confidencePara="",numTran ="";
+			ResultSet ParaResult = stmt.executeQuery("select * from PARAMS");
+			if(ParaResult.next()){
+				supportPara=ParaResult.getString(1);
+				confidencePara=ParaResult.getString(2);
+				numTran = ParaResult.getString(3);
+			}
+			
+			double supportLine=0.2; // support limit
+			double confidenceLine=0.4; // confidence limit
+			supportLine=Double.parseDouble(supportPara);
+			confidenceLine=Double.parseDouble(confidencePara);
+			
 			ArrayList<ArrayList<String>> items = new ArrayList<ArrayList<String>>(); 
 			ArrayList<ArrayList<String>> transactions = new ArrayList<ArrayList<String>>();
 			ArrayList<ArrayList<String>> largeItemSet = new ArrayList<ArrayList<String>>();
@@ -263,19 +298,30 @@ private static ArrayList<ArrayList<String>> getpowerset(int n,
 							String itemx="",itemy="";
 							Iterator<String> iter1 = hs1.iterator();
 							while (iter1.hasNext()) {
-								itemx= iter1.next()+";";
+								itemx+= iter1.next()+";";
 							}
 							Iterator<String> iter2 = hs2.iterator();
 							while (iter2.hasNext()) {
-								itemy= iter2.next()+";";
+								itemy+= iter2.next()+";";
 							}
+							itemx=orderString(itemx);
+							itemy=orderString(itemy);
 							stmt.executeQuery(
 							"INSERT INTO ASSOCIATIONRULES (ITEMX, ITEMY, SUPPORT,CONFIDENCE)VALUES ('"+itemx+"','"+itemy+"',"+ a1/transactions.size()+","+a2/a1+")"
 							);
 							}
 					}
 				}
-\				powerSet.clear();
+				powerSet.clear();
+			}
+			
+			for(ArrayList<String> oneItem:items){
+				HashSet<String> hsTem = new HashSet<String>();
+				hsTem.addAll(oneItem);
+				double a1 = (double) c.get(hsTem);
+				stmt.executeQuery(
+								"INSERT INTO ItemsSupport VALUES ('"+oneItem.get(0)+"','" +a1/transactions.size()+"')"
+								);
 			}
 			session.invalidate(); 
 			out.print("<script type='text/javascript'>alert('success');document.location.href='index.jsp';</script>");    

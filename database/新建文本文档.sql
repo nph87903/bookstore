@@ -101,3 +101,14 @@ items varchar(1000),
 address varchar(1000),
 primary key(dates)
 )
+
+create table itemsSupport(
+book_id number primary key,
+support number,
+foreign key (book_id) references book(book_id)
+)
+
+
+create table Coupons (
+code varchar(20) primary key,
+reward number(5))

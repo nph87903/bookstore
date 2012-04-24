@@ -35,7 +35,7 @@
             String       passwd="880224";
             
             String		 details="select * from book where book_id='"+id+"'";
-			String       associate = "select itemy from ASSOCIATIONRULES where itemx = '"+id+"'";
+			String       associate = "select itemy from associationrules where itemx = '"+id+";' and length(itemy)>=( select max(length(itemy))from associationrules where itemx = '"+id+";')";
 			//String query2="select * from users where username='"+loginUser+"' and password='"+loginPassword+"'";
             
             //*** Load the jdbc-odbc bridge driver
@@ -56,7 +56,13 @@
               stmt5 = con.createStatement();
 			  
 			  rs5 = stmt5.executeQuery(associate);
+			  
+			  
+			 
+			  
+			  
 %>
+
 </head>
 <body>
 
@@ -169,7 +175,9 @@
 	
 	
 	<div style = "position:absolute;top:700px; left:230px;">
-	<p> Recommend</p>
+	<div class="center_title_bar">Customers Who Bought This Item Also Bought</div>
+	</div>
+	<div style = "position:absolute;top:750px; left:230px;">
 	<%
 	   if (rs5.next())
 	   	   {
@@ -308,11 +316,13 @@
     
 	</div>
 	<!-- end of right content -->   
+	
 
 
 </div>
 <!-- end of main content -->
-  
+
+
 <%//*** close connection
                 
                 stmt4.close();

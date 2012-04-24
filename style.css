@@ -254,8 +254,87 @@ font-weight:bold;
 background:url(images/bar_bg.gif) no-repeat center;
 }
 
+
+
+.center_title_bar2{
+width:500px;
+height:31px;
+float:left;
+padding:0 0 0 10px;
+margin:0 0 0 5px;
+line-height:31px;
+font-size:12px;
+color:#159DCC;
+font-weight:bold;
+background:url(images/bar_bg.gif) no-repeat center;
+}
+
+.center_title_bar2{
+position:absolute;
+
+width:500px;
+height:31px;
+float:left;
+padding:0 0 0 10px;
+margin:0 0 0 5px;
+line-height:31px;
+font-size:12px;
+color:#159DCC;
+font-weight:bold;
+background:url(images/bar_bg.gif) no-repeat center;
+}
+
+/*-----------------Hot books-----------------*/
+.hot{
+position:absolute;
+top:810px;
+left:250px;
+width:600px;
+float:left;
+padding:5px 10px 5px 15px;
+}
+.hot2{
+position:relative;
+top:10px;
+left:0px;
+width:600px;
+float:left;
+padding:5px 10px 5px 15px;
+}
+.center_title_bar{
+width:575px;
+height:31px;
+float:left;
+padding:0 0 0 10px;
+margin:0 0 0 5px;
+line-height:31px;
+font-size:12px;
+color:#159DCC;
+font-weight:bold;
+background:url(images/bar_bg.gif) no-repeat center;
+}
+
+.center_title_bar2{
+width:500px;
+height:31px;
+float:left;
+padding:0 0 0 10px;
+margin:0 0 0 5px;
+line-height:31px;
+font-size:12px;
+color:#159DCC;
+font-weight:bold;
+background:url(images/bar_bg.gif) no-repeat center;
+}
+
+
+
+
 /*----------------------right content--------------*/
 .right_content{
+position:absolute;
+top:320px;
+left:900px;
 width:180px;
 float:left;
 padding:0px;
@@ -300,6 +379,15 @@ height:220px;
 float:left;
 padding:10px 10px 10px 11px;
 }
+
+.hot_book_box{
+
+width:173px;
+height:220px;
+float:left;
+padding:10px 10px 10px 11px;
+}
+
 .center_book_box{
 width:173px;
 height: 180px;
@@ -521,3 +609,5 @@ height:25px;
 font-size: 14px;
 color:#B40404;
 }
+
+

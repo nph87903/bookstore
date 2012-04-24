@@ -5,41 +5,22 @@
 <title>BookStore</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
 
-<script language="javascript"> 
-      	function checkuname() {
-      		var patrn = /^([A-Za-z0-9])(\w)+@(\w)+(\.)(com|com\.cn|net|cn|net\.cn|org|biz|info|gov|gov\.cn|edu|edu\.cn)/; 
-      		 x=document.f1.textbox.value
-      		 y=document.f1.password.value
-      		 if(!patrn.exec(x)) 
-      		 {
-      		 	 alert("username is not valid (please input email form)");
-      		 	 return false
-      		 }
-      		 else if(y.length<8){
-      		 			alert("password is less than 8 digits and characters");
-      		 			return false
-      		 			}
-      		 			else
-      		 	 	  return true 
-      	}
-     </script>
+
 
 
 <%-- JSP  --%>
     <%@ page import="java.net.*, java.io.*, java.sql.*, java.util.*" %>
 <% 
-
 			String url   = "jdbc:oracle:thin:@127.0.0.1:1521:XE" ;
             Connection   con;
-            Statement    stmt;
-            Statement    stmt2;
-            Statement    stmt3;
+            
             Statement    stmt4;
-            ResultSet    rs;
-            ResultSet    rs2;
-            ResultSet    rs3;
+			
+			Statement    stmt5;
+            
             ResultSet    rs4;
-           
+            ResultSet    rs5;
+			
             String loginUser=null;
             String count="0";
             String price="0.00";
@@ -48,16 +29,13 @@
             if (session.getAttribute("count")!=null) count=(String)session.getAttribute("count");
             if (session.getAttribute("price")!=null) price=(String)session.getAttribute("price");
             
-			//session.invalidate();
+            String 		id=request.getParameter("id");
             
-            //out.print(session.getAttribute("username"));
-            
-            String       uname="project";
+             String       uname="project";
             String       passwd="880224";
-            String       NewReleases="select title,imagename,price,book_id from book order by book_id desc";
-            String		 bestseller="select title,imagename,price,book_id from (select  * from itemssupport join book using(book_id) order by support desc ) where rownum <4";
-            String		 special="select title,imagename,price,specialprice,book_id from specialproducts";  
-            String		 recommend="select title,imagename,description,book_id from recommend";
+            
+            String		 details="select * from book where book_id='"+id+"'";
+			String       associate = "select itemy from ASSOCIATIONRULES where itemx = '"+id+";'";
 			//String query2="select * from users where username='"+loginUser+"' and password='"+loginPassword+"'";
             
             //*** Load the jdbc-odbc bridge driver
@@ -68,18 +46,16 @@
 
                 //***  Create a Statement object so we can submit
                 //***  SQL statements to the driver
-                stmt = con.createStatement();
-                stmt2 = con.createStatement();
-                stmt3 = con.createStatement();
+                
                 stmt4 = con.createStatement();
 
                 //*** execute query and show result
-                rs = stmt.executeQuery(NewReleases);
-                rs2 = stmt2.executeQuery(bestseller);
-                rs3 = stmt3.executeQuery(special);
-                rs4 = stmt4.executeQuery(recommend);
+                
+                rs4 = stmt4.executeQuery(details);
             
-              
+              stmt5 = con.createStatement();
+			  
+			  rs5 = stmt5.executeQuery(associate);
 %>
 </head>
 <body>
@@ -152,23 +128,7 @@
           <li class="odd"><input class="btn4" name="textbox" type="submit" style="width:180px;" value="Sports & Outdoors"/></li>
           </form>
           </ul> 
-       <%
-       for(int i=0;i<3;i++){ 
-		    if(!rs3.next())break;
-		     %>         
-		<div class="title_box">Special Products</div>  
-        <div class="border_box">
-        	<div class="book_title"><% out.println(rs3.getString(1)); %></div>
-       		<div class="book_img"><img src="<%out.print("images/"+rs3.getString(2)); %>" alt="" title="" width="100" height="110" border="0" /></div>
-       		<div class="book_price"><span class="reduce">$<% out.println(rs3.getString(3)); %></span> <span class="price">$<% out.println(rs3.getString(4)); %></span></div>
-       		<form method=post action="details.jsp">
-            <input type="hidden" name="id" value="<% out.print(rs3.getString(5)); %>"/>            
-            <input class="btn3" type="submit" name="submit" value="Details"/>  
-            </form>
-        </div>  
-       <%
-       }
-        %>
+       
 	</div>
 	<!-- end of left content --> 
 
@@ -179,14 +139,24 @@
 		    if(!rs4.next())break;
 		     %> 
     	<div class="recommended">
-        <img src="<%out.print("images/"+rs4.getString(2)); %>" width="135" height="140" border="0" class="recommended_img" alt="" title="" />              	
+        <img src="<%out.print("images/"+rs4.getString(9)); %>" width="135" height="140" border="0" class="recommended_img" alt="" title="" />              	
         	<div class="recommended_details">
-			    <div class="recommended_head">Recommend:<p></p></div>
-       	    	<div class="recommended_title"><% out.println(rs4.getString(1)); %></div>
-          	    <div class="recommended_text"><% out.println(rs4.getString(3)); %></div>
-                
+			    <div class="recommended_title">BookId:<% out.println(rs4.getString(1)); %></div>
+       	    	<div class="recommended_title">Title:<% out.println(rs4.getString(2)); %></div>
+       	    	<div class="recommended_title">Author:<% out.println(rs4.getString(3)); %></div>
+       	    	<div class="recommended_title">Price:<% out.println(rs4.getString(4)); %></div>
+       	    	<div class="recommended_title">ISBN:<% out.println(rs4.getString(5)); %></div>
+       	    	<div class="recommended_title">Publisher:<% out.println(rs4.getString(7)); %></div>
+       	    	<div class="recommended_title">Year:<% out.println(rs4.getString(8)); %></div>
+          	    <div class="recommended_title">Description:<% out.println(rs4.getString(10)); %></div>
+            <form method=post action="addtocart.jsp">
+            <input type="hidden" name="title" value="<% out.print(rs4.getString(2)); %>"/>
+            <input type="hidden" name="price" value="<% out.println(rs4.getString(4)); %>"/>			
+			 <input type="hidden" name="book_id" value="<% out.println(rs4.getString(1)); %>"/>
+            <input class="btn1" type="submit" name="submit" value="Add to Cart"/>  
+            </form>     
             <form method=post action="details.jsp">
-            <input type="hidden" name="id" value="<% out.print(rs4.getString(4)); %>"/>            
+            <input type="hidden" name="id" value="<% out.print(rs4.getString(1)); %>"/>            
             <input class="btn2" type="submit" name="submit" value="Details"/>  
             </form>
             </div>
@@ -194,95 +164,63 @@
 		<%
        }
         %>
-		<div class="center_title_bar">New Releases</div>	
-    	<% 
-    	try{
-     
-            for(int i=0;i<6;i++){ 
-              
-               if(!rs.next())break;
-                %>
-         	<div class="book_box">
+		
+	</div>
+	
+	
+	<div style = "position:absolute;top:700px; left:230px;">
+	<p> Recommend</p>
+	<%
+	   if (rs5.next())
+	   	   {
+		   String[] splitStr = rs5.getString(1).split(";"); 
+		   for ( int i = 0;i < splitStr.length;i++)
+		   
+		   {
+		   Statement    stmt6;
+		   ResultSet    rs6;
+		   
+		    stmt6 = con.createStatement();
+
+                //*** execute query and show result
+                
+                rs6 = stmt6.executeQuery("select * from book where book_id='"+splitStr[i]+"'");
+				
+				if (rs6.next())
+				{
+				
+				%>
+				<div class="book_box">
             <div class="center_book_box">            
-                 <div class="book_title"><% out.println(rs.getString(1)); %></div>
-                 <div class="book_img"><img src="<%out.print("images/"+rs.getString(2)); %>" alt="" title="" width="100" height="110" border="0" /></div>
-                 <div class="book_price">$<% out.println(rs.getString(3)); %></div>                        
+                 <div class="book_title"><% out.println(rs6.getString(2)); %></div>
+                 <div class="book_img"><img src="<%out.print("images/"+rs6.getString(9)); %>" alt="" title="" width="100" height="110" border="0" /></div>
+                 <div class="book_price">$<% out.println(rs6.getString(4)); %></div>                        
             </div>          
             <div class="book_details_tab">
             <form method=post action="addtocart.jsp">
-            <input type="hidden" name="title" value="<% out.println(rs.getString(1)); %>"/>
-            <input type="hidden" name="price" value="<% out.println(rs.getString(3)); %>"/>
-			 <input type="hidden" name="book_id" value="<% out.println(rs.getString(4)); %>"/>
-			
+            <input type="hidden" name="title" value="<% out.println(rs6.getString(2)); %>"/>
+            <input type="hidden" name="price" value="<% out.println(rs6.getString(4)); %>"/>			
+			 <input type="hidden" name="book_id" value="<% out.println(rs6.getString(1)); %>"/>
             <input class="btn1" type="submit" name="submit" value="Add to Cart"/>  
             </form> 
             <form method=post action="details.jsp">
-            <input type="hidden" name="id" value="<% out.print(rs.getString(4)); %>"/>            
+            <input type="hidden" name="id" value="<% out.print(rs6.getString(1)); %>"/>            
             <input class="btn2" type="submit" name="submit" value="Details"/>  
             </form>            
             </div>                     
        		</div>
-        <%
-        
-        }
-    	
-    	
-    	}
-    	catch (Exception e)
-                {
-                out.println("error");
-                e.printStackTrace();
-                }
-    	
-    	 %>
-
-    	<div class="center_title_bar">Best Sellers</div>
-
-  
-    	<% 
-    	try{
-     
-            for(int i=0;i<6;i++){ 
-              
-               if(!rs2.next())break;
-                %>
-         	<div class="book_box">
-         	
-            <div class="center_book_box">            
-                 <div class="book_title"><% out.println(rs2.getString(1)); %></div>
-                 <div class="book_img"><img src="<%out.print("images/"+rs2.getString(2)); %>" alt="" title="" width="100" height="110" border="0" /></div>
-                 <div class="book_price">$<% out.print(rs2.getString(3)); %></div>                        
-            </div>          
-            <div class="book_details_tab">
-            <form method=post action="addtocart.jsp">
-            <input type="hidden" name="title" value="<% out.print(rs2.getString(1)); %>"/>
-            <input type="hidden" name="price" value="<% out.print(rs2.getString(3)); %>"/>
-			 <input type="hidden" name="book_id" value="<% out.println(rs2.getString(4)); %>"/>
-            <input class="btn1" type="submit" name="submit" value="Add to Cart"/>  
-            </form> 
-            <form method=post action="details.jsp">
-            <input type="hidden" name="id" value="<% out.print(rs2.getString(4)); %>"/>            
-            <input class="btn2" type="submit" name="submit" value="Details"/>  
-            </form>
-                      
-            </div>  
-                                
-       		</div>
-        <%
-        
-        }
-    	
-    	
-    	}
-    	catch (Exception e)
-                {
-                out.println("error");
-                e.printStackTrace();
-                }
-    	
-    	 %>  
-      
+				
+				<%
+				
+				}
+				stmt6.close();
+		   
+		   }
+		  
+	   }
+	%>
 	</div>
+		
 	<!-- end of center content -->
 
     <!-- right content start -->
@@ -306,7 +244,7 @@
                 }
                 else{
                 	%>
-                	<form name=f1 action="login.jsp"  method="post" onsubmit="return checkuname();">
+                	<form method=post action="login.jsp">
 					<div id="login" class="member" >
 					<p></p>
 					<p>your name</p>
@@ -376,10 +314,10 @@
 <!-- end of main content -->
   
 <%//*** close connection
-                stmt.close();
-                stmt2.close();
-                stmt3.close();
+                
                 stmt4.close();
+				stmt5.close();
+				
                 con.close(); %>
 </body>
 </html>

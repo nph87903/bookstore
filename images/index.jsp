@@ -28,7 +28,6 @@
 <%-- JSP  --%>
     <%@ page import="java.net.*, java.io.*, java.sql.*, java.util.*" %>
 <% 
-
 			String url   = "jdbc:oracle:thin:@127.0.0.1:1521:XE" ;
             Connection   con;
             Statement    stmt;
@@ -48,15 +47,14 @@
             if (session.getAttribute("count")!=null) count=(String)session.getAttribute("count");
             if (session.getAttribute("price")!=null) price=(String)session.getAttribute("price");
             
-			//session.invalidate();
             
             //out.print(session.getAttribute("username"));
             
             String       uname="project";
             String       passwd="880224";
             String       NewReleases="select title,imagename,price,book_id from book order by book_id desc";
-            String		 bestseller="select title,imagename,price,book_id from (select  * from itemssupport join book using(book_id) order by support desc ) where rownum <4";
-            String		 special="select title,imagename,price,specialprice,book_id from specialproducts";  
+            String		 bestseller="select title,imagename,price,book_id from bestseller";  
+            String		 special="select title,imagename,price,specialprice,book_id from specialproducts";
             String		 recommend="select title,imagename,description,book_id from recommend";
 			//String query2="select * from users where username='"+loginUser+"' and password='"+loginPassword+"'";
             
@@ -213,7 +211,6 @@
             <input type="hidden" name="title" value="<% out.println(rs.getString(1)); %>"/>
             <input type="hidden" name="price" value="<% out.println(rs.getString(3)); %>"/>
 			 <input type="hidden" name="book_id" value="<% out.println(rs.getString(4)); %>"/>
-			
             <input class="btn1" type="submit" name="submit" value="Add to Cart"/>  
             </form> 
             <form method=post action="details.jsp">

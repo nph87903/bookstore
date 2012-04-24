@@ -22,8 +22,13 @@
             ResultSet    rs3;
             ResultSet    rs4;
 			
+			
+			
 			Statement    stmt5;//test
 			ResultSet    rs5;//test
+			
+			Statement    stmt6;//count
+			ResultSet    rs6;//count
            
             String loginUser=null;
             String count="0";
@@ -37,7 +42,11 @@
             String 		searchtext=request.getParameter("textbox");                      
             String       uname="project";
             String       passwd="880224";
-            String       query="select title,imagename,price,book_id from book JOIN category USING (category_id)  where lower(title) like lower('%"+searchtext+"%') or category_name='"+searchtext+"' or lower(author) like lower('%"+searchtext+"%')";
+			String       query="select title,imagename,price,book_id from book JOIN category USING (category_id)  where lower(title) like lower('%"+searchtext+"%') or category_name='"+searchtext+"' or lower(author) like lower('%"+searchtext+"%')"; 
+			
+			String       queryCount = "select count(title) from book JOIN category USING (category_id)  where category_name='"+searchtext+"'"; 
+			
+            String       query2="select title,imagename,price,book_id from itemssupport join book using(book_id) join category using(category_id) where category_name='"+searchtext+"' and support <= some(select max(support)from itemssupport join book using(book_id) join category using(category_id) where category_name='"+searchtext+"')";
             //*** Load the jdbc-odbc bridge driver
                 Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();
                 
@@ -49,9 +58,14 @@
                 //***  Create a Statement object so we can submit
                 //***  SQL statements to the driver
                 stmt = con.createStatement();
-
+				 stmt5 = con.createStatement();
+				 
+				 stmt6 = con.createStatement();
+			
                 //*** execute query and show result
                 rs = stmt.executeQuery(query);
+				 rs5 = stmt5.executeQuery(query2);
+				 rs6 = stmt6.executeQuery(queryCount);
            // }
            /// catch(Exception e)
            // {
@@ -80,8 +94,7 @@
 <!-- end of header --> 
 
 <!-- main content start -->
-<div class="main_content"> 
-   	
+<div class="main_content">    	
 	<!-- left content start -->
     <div class="left_content">
 	    <div class="navigation">
@@ -136,9 +149,7 @@
     <!-- center content start -->
 	<div class="center_content">  
     	
-		<div class="center_title_bar">Search Result</div>
-     
-    	
+		<div class="center_title_bar">Search Result</div>    	
     	<% 
     	try{
      
@@ -156,10 +167,67 @@
             <form method=post action="addtocart.jsp">
             <input type="hidden" name="title" value="<% out.print(rs.getString(1)); %>"/>
             <input type="hidden" name="price" value="<% out.print(rs.getString(3)); %>"/>
+			 <input type="hidden" name="book_id" value="<% out.print(rs.getString(4)); %>"/> 
             <input class="btn1" type="submit" name="submit" value="Add to Cart"/>  
             </form> 
             <form method=post action="details.jsp">
             <input type="hidden" name="id" value="<% out.print(rs.getString(4)); %>"/>            
+            <input class="btn2" type="submit" name="submit" value="Details"/>  
+            </form>            
+            </div>                     
+       		</div>
+        <%
+        
+        }
+    	
+    	}
+    	catch (Exception e)
+                {
+                out.println("error");
+                e.printStackTrace();
+                }
+    	
+    	 %>
+
+	</div>
+	
+    <%
+	
+	if(rs6.next())
+	{ 
+	
+	if (Integer.parseInt(rs6.getString(1))<= 3)
+	{
+	out.println("<div class=\"hot2\">");
+	}
+else {
+out.println("<div class=\"hot\">");
+} 
+}
+    %>	
+		<div class="center_title_bar">Most Popular in this Category</div>    	
+    	<% 
+    	try{
+     
+            for(int i=0;i<50;i++){ 
+              
+               if(!rs5.next())break;
+                %>
+         	<div class="hot_book_box">
+            <div class="center_book_box">            
+                 <div class="book_title"><% out.println(rs5.getString(1)); %></div>
+                 <div class="book_img"><img src="<%out.print("images/"+rs5.getString(2)); %>" alt="" title="" width="100" height="110" border="0" /></div>
+                 <div class="book_price">$<% out.println(rs5.getString(3)); %></div>                        
+            </div>          
+            <div class="book_details_tab">
+            <form method=post action="addtocart.jsp">
+            <input type="hidden" name="title" value="<% out.print(rs5.getString(1)); %>"/>
+            <input type="hidden" name="price" value="<% out.print(rs5.getString(3)); %>"/>
+			<input type="hidden" name="book_id" value="<% out.print(rs5.getString(4)); %>"/> 
+            <input class="btn1" type="submit" name="submit" value="Add to Cart"/>  
+            </form> 
+            <form method=post action="details.jsp">
+            <input type="hidden" name="id" value="<% out.print(rs5.getString(4)); %>"/>            
             <input class="btn2" type="submit" name="submit" value="Details"/>  
             </form>            
             </div>                     

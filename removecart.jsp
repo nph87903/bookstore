@@ -20,14 +20,6 @@ for(int j=0;j<item.length;j++)
 }
 session.setAttribute("cart",result);
 
-
-
-
-
-
-
-
-
 int a = null==session.getAttribute("count")?0:Integer.parseInt(session.getAttribute("count").toString());
 a=a-1 ;
 session.setAttribute("count",String.valueOf(a));
@@ -38,9 +30,13 @@ if(session.getAttribute("price")!=null)
 {
 	double temp=Double.parseDouble(session.getAttribute("price").toString())-price;
 	session.setAttribute("price",String.valueOf(df.format(temp)));
+	
+	session.setAttribute("price2",String.valueOf(df.format(temp)));
 	}
 else
-	session.setAttribute("price",String.valueOf(price));
+	{session.setAttribute("price",String.valueOf(price));
+	session.setAttribute("price2",String.valueOf(price));
+	}
 out.print("<script type='text/javascript'>alert('remove from cart!');document.location.href='shoppingcart.jsp';</script>");
 
 %>
