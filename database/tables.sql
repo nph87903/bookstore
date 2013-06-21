@@ -14,13 +14,13 @@ imagename varchar(100),
 )
 
 create table category
-£¨
+ï¿½ï¿½
 category_id number,
 category_name varchar(100),
 primary key(category_id),
 
 
-£©
+ï¿½ï¿½
 
 create table bestseller
 (
